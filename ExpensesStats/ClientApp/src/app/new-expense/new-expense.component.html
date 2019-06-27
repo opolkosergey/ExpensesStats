@@ -1,0 +1,5 @@
+<form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
+  {{userForm.value | json}}
+  <input type="text" name="sum" ngModel required>
+  <button class="button" type="submit">Add expense</button>
+</form>
