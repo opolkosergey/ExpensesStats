@@ -26,6 +26,12 @@ namespace ExpensesStats.Controllers
             });
         }
 
+        [HttpGet("[action]")]
+        public IEnumerable<string> Persons()
+        {
+            return new string[] { "Me", "NotMe" };
+        }
+
         public class WeatherForecast
         {
             public string DateFormatted { get; set; }

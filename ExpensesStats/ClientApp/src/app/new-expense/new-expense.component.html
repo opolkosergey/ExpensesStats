@@ -1,5 +1,44 @@
 <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
   {{userForm.value | json}}
-  <input type="text" name="sum" ngModel required>
-  <button class="button" type="submit">Add expense</button>
+  {{userForm.valid}}
+  <div class="form-group">
+    <label for="money">Money</label>
+    <input type="text"
+           class="form-control"
+           name="money"
+           autocomplete="off"
+           #money="ngModel"
+           [class.is-invalid]="money.invalid && money.touched"
+           ngModel
+           required
+           pattern="^[0-9]+(\.[0-9]{1,2})?$"
+           placeholder="Enter sum here...">
+    <span class="input-group-text">{{userForm.value.money | currency:'BYN':'symbol':'.2'}}</span>
+    <small class="text-danger" [class.d-none]="money.valid || money.untouched">Money is required</small>
+  </div>
+
+  <div [hidden]="hasSelectedOption" class="form-group">
+    <label for="money">Day of year</label>
+    <input type="date"
+           class="form-control"
+           name="particularDate"
+           ngModel
+           #particularDate="ngModel"
+           [required]="!hasSelectedOption">
+  </div>
+  <small class="text-danger" [class.d-none]="particularDate.valid || particularDate.untouched">Date is required</small>
+
+  <fieldset *ngIf="!particularDate.value" class="form-group">
+    <div class="row">
+      <legend class="col-form-label col-sm-2 pt-0">Date</legend>
+      <div class="col-sm-10">
+        <div class="form-check" *ngFor="let dateValue of dates">
+          <input type="radio" class="radio" id="{{dateValue}}" name="date" value={{dateValue}} ngModel #date="ngModel" (change)="onDateChanged($event)" [required]="!particularDate.value">
+          <label class="form-check-label" for="{{dateValue}}">{{dateValue}}</label>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <button type="submit" class="btn btn-primary" [disabled]="!userForm.valid">Add expence</button>
 </form>
